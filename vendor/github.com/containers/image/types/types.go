@@ -6,8 +6,9 @@ import (
 	"time"
 
 	"github.com/containers/image/docker/reference"
+	encconfig "github.com/containers/ocicrypt/config"
 	"github.com/opencontainers/go-digest"
-	"github.com/opencontainers/image-spec/specs-go/v1"
+	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
 // ImageTransport is a top-level namespace for ways to to store/load an image.
@@ -356,6 +357,8 @@ type Image interface {
 	// Everything in options.InformationOnly should be provided, other fields should be set only if a modification is desired.
 	// This does not change the state of the original Image object.
 	UpdatedImage(ctx context.Context, options ManifestUpdateOptions) (Image, error)
+	// SupportsEncryption returns an indicator that the image supports encryption
+	SupportsEncryption(ctx context.Context) bool
 	// Size returns an approximation of the amount of disk space which is consumed by the image in its current
 	// location.  If the size is not known, -1 will be returned.
 	Size() (int64, error)
@@ -487,6 +490,8 @@ type SystemContext struct {
 	DockerInsecureSkipTLSVerify OptionalBool
 	// if nil, the library tries to parse ~/.docker/config.json to retrieve credentials
 	DockerAuthConfig *DockerAuthConfig
+	// if not nil, CryptoConfig will be used to encrypt/decrypt images
+	CryptoConfig *encconfig.CryptoConfig
 	// if not "", an User-Agent header is added to each request when contacting a registry.
 	DockerRegistryUserAgent string
 	// if true, a V1 ping attempt isn't done to give users a better error. Default is false.
