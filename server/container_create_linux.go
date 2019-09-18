@@ -15,6 +15,7 @@ import (
 	"github.com/containers/libpod/pkg/apparmor"
 	"github.com/containers/libpod/pkg/secrets"
 	createconfig "github.com/containers/libpod/pkg/spec"
+	cryptoconfig "github.com/containers/ocicrypt/config"
 	"github.com/containers/storage/pkg/idtools"
 	"github.com/cri-o/cri-o/lib/sandbox"
 	"github.com/cri-o/cri-o/oci"
@@ -273,7 +274,7 @@ func (s *Server) createContainerPlatform(container *oci.Container, infraContaine
 	return err
 }
 
-func (s *Server) createSandboxContainer(ctx context.Context, containerID string, containerName string, sb *sandbox.Sandbox, sandboxConfig *pb.PodSandboxConfig, containerConfig *pb.ContainerConfig) (*oci.Container, error) {
+func (s *Server) createSandboxContainer(ctx context.Context, containerID string, containerName string, sb *sandbox.Sandbox, sandboxConfig *pb.PodSandboxConfig, containerConfig *pb.ContainerConfig, cryptoConfig cryptoconfig.CryptoConfig) (*oci.Container, error) {
 	if sb == nil {
 		return nil, errors.New("createSandboxContainer needs a sandbox")
 	}
@@ -770,7 +771,8 @@ func (s *Server) createSandboxContainer(ctx context.Context, containerID string,
 		metaname,
 		attempt,
 		mountLabel,
-		containerIDMappings)
+		containerIDMappings,
+		cryptoConfig)
 	if err != nil {
 		return nil, err
 	}

@@ -115,6 +115,17 @@ type RuntimeConfig struct {
 	// The name is matched against the Runtimes map below.
 	DefaultRuntime string `toml:"default_runtime"`
 
+	// DecryptionKeysPath is the path where decryption keys should be kept.
+	DecryptionKeysPath string `toml:"decryption_keys_path"`
+
+	// EnableImageAuthorization determines if the image authorization on the
+	// encrypted images should be performed or not. If you are not going to use
+	// encrypted images then disabling this flag will give a performance boost
+	// while creating a container.
+	// However, if the encrypted images are used then enabling this flag is
+	// hightly recommended to prevent unauthorized access to encrypted images.
+	EnableImageAuthorization bool `toml:"enable_image_authorization"`
+
 	// RuntimeUntrustedWorkload is the OCI compatible runtime used for
 	// untrusted container workloads. This is an optional setting, except
 	// if DefaultWorkloadTrust is set to "untrusted".
@@ -372,7 +383,9 @@ func DefaultConfig() *Config {
 			FileLockingPath: lockPath,
 		},
 		RuntimeConfig: RuntimeConfig{
-			DefaultRuntime: "runc",
+			DecryptionKeysPath:       "/etc/crio/keys/",
+			EnableImageAuthorization: false,
+			DefaultRuntime:           "runc",
 			Runtimes: map[string]oci.RuntimeHandler{
 				"runc": {
 					RuntimePath: "/usr/bin/runc",

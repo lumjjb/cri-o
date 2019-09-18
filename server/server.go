@@ -83,6 +83,9 @@ type Server struct {
 	monitorsChan chan struct{}
 
 	defaultIDMappings *idtools.IDMappings
+
+	decryptionKeysPath       string
+	enableImageAuthorization bool
 }
 
 type certConfigCache struct {
@@ -359,6 +362,9 @@ func New(ctx context.Context, config *Config) (*Server, error) {
 		monitorsChan:      make(chan struct{}),
 		defaultIDMappings: idMappings,
 	}
+
+	s.decryptionKeysPath = config.DecryptionKeysPath
+	s.enableImageAuthorization = config.EnableImageAuthorization
 
 	if s.seccompEnabled {
 		seccompProfile, fileErr := ioutil.ReadFile(config.SeccompProfile)
