@@ -1,12 +1,17 @@
 package server
 
 import (
+	b64 "encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 	"time"
 
+	encconfig "github.com/containers/ocicrypt/config"
+	cryptUtils "github.com/containers/ocicrypt/utils"
 	"github.com/cri-o/cri-o/lib/sandbox"
 	"github.com/cri-o/cri-o/server/metrics"
 	"github.com/cri-o/ocicni/pkg/ocicni"
@@ -277,4 +282,37 @@ func getUlimitsFromConfig(config Config) ([]ulimit, error) {
 // Translate container labels to a description of the container
 func translateLabelsToDescription(labels map[string]string) string {
 	return fmt.Sprintf("%s/%s/%s", labels[types.KubernetesPodNamespaceLabel], labels[types.KubernetesPodNameLabel], labels[types.KubernetesContainerNameLabel])
+}
+
+// getDecryptionKeys reads the keys from the given directory
+func getDecryptionKeys(keysPath string) (encconfig.CryptoConfig, error) {
+	var cc encconfig.CryptoConfig
+
+	decryptionKeysFiles, err := ioutil.ReadDir(keysPath)
+	if err != nil {
+		return cc, err
+	}
+
+	var base64Keys []string
+
+	for _, decryptionKeyFile := range decryptionKeysFiles {
+		privateKey, err := ioutil.ReadFile(path.Join(keysPath, decryptionKeyFile.Name()))
+		if err != nil {
+			return cc, err
+		}
+
+		// TODO - Remove the need to covert to base64. The ocicrypt library
+		// should provide a method to directly process the private keys
+		sEnc := b64.StdEncoding.EncodeToString(privateKey)
+		base64Keys = append(base64Keys, sEnc)
+	}
+
+	sortedDc, err := cryptUtils.SortDecryptionKeys(strings.Join(base64Keys, ","))
+	if err != nil {
+		return cc, err
+	}
+
+	cc = encconfig.InitDecryption(sortedDc)
+
+	return cc, nil
 }

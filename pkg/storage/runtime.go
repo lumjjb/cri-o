@@ -10,6 +10,7 @@ import (
 	istorage "github.com/containers/image/storage"
 	"github.com/containers/image/transports/alltransports"
 	"github.com/containers/image/types"
+	cryptoconfig "github.com/containers/ocicrypt/config"
 	"github.com/containers/storage"
 	cstorage "github.com/containers/storage"
 	"github.com/containers/storage/pkg/idtools"
@@ -88,7 +89,8 @@ type RuntimeServer interface {
 	// CreateContainer creates a container with the specified ID.
 	// Pointer arguments can be nil.  Either the image name or ID can be
 	// omitted, but not both.  All other arguments are required.
-	CreateContainer(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings) (ContainerInfo, error)
+	CreateContainer(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings, cryptoConfig cryptoconfig.CryptoConfig) (ContainerInfo, error)
+
 	// DeleteContainer deletes a container, unmounting it first if need be.
 	DeleteContainer(idOrName string) error
 
@@ -148,7 +150,7 @@ func (metadata *RuntimeContainerMetadata) SetMountLabel(mountLabel string) {
 	metadata.MountLabel = mountLabel
 }
 
-func (r *runtimeService) createContainerOrPodSandbox(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName, uid, namespace string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings) (ContainerInfo, error) {
+func (r *runtimeService) createContainerOrPodSandbox(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName, uid, namespace string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings, cryptoConfig cryptoconfig.CryptoConfig) (ContainerInfo, error) {
 	var ref types.ImageReference
 	if podName == "" || podID == "" {
 		return ContainerInfo{}, ErrInvalidPodName
@@ -180,6 +182,23 @@ func (r *runtimeService) createContainerOrPodSandbox(systemContext *types.System
 		}
 	}
 	img, err := istorage.Transport.GetStoreImage(r.storageImageServer.GetStore(), ref)
+
+	if img != nil {
+		// Check for image authentication.
+		sourceCtx := types.SystemContext{}
+		if systemContext != nil {
+			sourceCtx = *systemContext // A shallow copy
+			sourceCtx.CryptoConfig = &cryptoConfig
+		}
+		_, err = r.storageImageServer.CanDecrypt(systemContext, img.Names[0], &copy.Options{
+			SourceCtx:      &sourceCtx,
+			DestinationCtx: systemContext,
+		})
+		if err != nil {
+			return ContainerInfo{}, err
+		}
+	}
+
 	if img == nil && errors.Cause(err) == storage.ErrImageUnknown && imageName == r.pauseImage {
 		image := imageID
 		if imageName != "" {
@@ -338,11 +357,11 @@ func (r *runtimeService) createContainerOrPodSandbox(systemContext *types.System
 }
 
 func (r *runtimeService) CreatePodSandbox(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, metadataName, uid, namespace string, attempt uint32, idMappings *idtools.IDMappings) (ContainerInfo, error) {
-	return r.createContainerOrPodSandbox(systemContext, podName, podID, imageName, imageID, containerName, podID, metadataName, uid, namespace, attempt, "", idMappings)
+	return r.createContainerOrPodSandbox(systemContext, podName, podID, imageName, imageID, containerName, podID, metadataName, uid, namespace, attempt, "", idMappings, cryptoconfig.CryptoConfig{})
 }
 
-func (r *runtimeService) CreateContainer(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings) (ContainerInfo, error) {
-	return r.createContainerOrPodSandbox(systemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName, "", "", attempt, mountLabel, idMappings)
+func (r *runtimeService) CreateContainer(systemContext *types.SystemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName string, attempt uint32, mountLabel string, idMappings *idtools.IDMappings, cryptoConfig cryptoconfig.CryptoConfig) (ContainerInfo, error) {
+	return r.createContainerOrPodSandbox(systemContext, podName, podID, imageName, imageID, containerName, containerID, metadataName, "", "", attempt, mountLabel, idMappings, cryptoConfig)
 }
 
 func (r *runtimeService) RemovePodSandbox(idOrName string) error {

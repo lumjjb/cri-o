@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	cryptoconfig "github.com/containers/ocicrypt/config"
 	"github.com/cri-o/cri-o/lib"
 	"github.com/cri-o/cri-o/lib/sandbox"
 	"github.com/cri-o/cri-o/pkg/seccomp"
@@ -573,7 +574,17 @@ func (s *Server) CreateContainer(ctx context.Context, req *pb.CreateContainerReq
 		}
 	}()
 
-	container, err := s.createSandboxContainer(ctx, containerID, containerName, sb, req.GetSandboxConfig(), containerConfig)
+	var cc cryptoconfig.CryptoConfig
+	if s.enableImageAuthorization {
+		if _, err := os.Stat(s.decryptionKeysPath); err == nil {
+			cc, err = getDecryptionKeys(s.decryptionKeysPath)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	container, err := s.createSandboxContainer(ctx, containerID, containerName, sb, req.GetSandboxConfig(), containerConfig, cc)
 	if err != nil {
 		return nil, err
 	}
