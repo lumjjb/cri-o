@@ -190,12 +190,12 @@ func (r *runtimeService) createContainerOrPodSandbox(systemContext *types.System
 			sourceCtx = *systemContext // A shallow copy
 			sourceCtx.CryptoConfig = &cryptoConfig
 		}
-		_, err = r.storageImageServer.CanDecrypt(systemContext, img.Names[0], &copy.Options{
+		_, err = r.storageImageServer.CanDecrypt(systemContext, ref, &copy.Options{
 			SourceCtx:      &sourceCtx,
 			DestinationCtx: systemContext,
 		})
 		if err != nil {
-			return ContainerInfo{}, err
+			return ContainerInfo{}, errors.Wrap(err, "unable to check authorization of image")
 		}
 	}
 

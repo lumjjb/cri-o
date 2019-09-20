@@ -93,7 +93,7 @@ type ImageServer interface {
 	PullImage(systemContext *types.SystemContext, imageName string, options *copy.Options) (types.ImageReference, error)
 	// CanDecrypt checks if the image is encrypted, and if it is whether it can be decrypted
 	// using the given set of private keys.
-	CanDecrypt(systemContext *types.SystemContext, imageName string, options *copy.Options) (bool, error)
+	CanDecrypt(systemContext *types.SystemContext, imageRef types.ImageReference, options *copy.Options) (bool, error)
 	// UntagImage removes a name from the specified image, and if it was
 	// the only name the image had, removes the image.
 	UntagImage(systemContext *types.SystemContext, imageName string) error
@@ -436,8 +436,7 @@ func (svc *imageService) PullImage(systemContext *types.SystemContext, imageName
 	return destRef, nil
 }
 
-func (svc *imageService) CanDecrypt(systemContext *types.SystemContext, imageName string, inputOptions *copy.Options) (bool, error) {
-	canDecrypt := false
+func (svc *imageService) CanDecrypt(systemContext *types.SystemContext, ref types.ImageReference, inputOptions *copy.Options) (bool, error) {
 	inputOptions.CheckAuthorization = true
 
 	// Since the images is cached, in case if the layers of this image are
@@ -445,14 +444,18 @@ func (svc *imageService) CanDecrypt(systemContext *types.SystemContext, imageNam
 	// used to unwrap the symmetric key needed to decrypt the respective layer.
 	// This procedure ensures that CRIO does not serve encrypted images
 	// from it's cache without having valid keys.
-	// We are re-using PullImage call here because it already has the logic
-	// to reach to the correct descriptor belonging to the every layer of the image
-	_, err := svc.PullImage(systemContext, imageName, inputOptions)
-	if err == nil {
-		canDecrypt = true
+	policy, err := signature.DefaultPolicy(systemContext)
+	if err != nil {
+		return false, err
 	}
 
-	return canDecrypt, err
+	policyContext, err := signature.NewPolicyContext(policy)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = copy.Image(svc.ctx, policyContext, ref, ref, inputOptions)
+	return err == nil, err
 }
 
 func (svc *imageService) UntagImage(systemContext *types.SystemContext, nameOrID string) error {
