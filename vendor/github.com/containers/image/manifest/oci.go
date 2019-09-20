@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/containers/image/types"
+	ociencspec "github.com/containers/ocicrypt/spec"
 	"github.com/opencontainers/go-digest"
 	"github.com/opencontainers/image-spec/specs-go"
 	imgspecv1 "github.com/opencontainers/image-spec/specs-go/v1"
@@ -131,4 +132,22 @@ func (m *OCI1) ImageID([]digest.Digest) (string, error) {
 		return "", err
 	}
 	return m.Config.Digest.Hex(), nil
+}
+
+// IsEncryptedLayer indicates whether the blob is is encrypted
+func IsEncryptedLayer(b types.BlobInfo) bool {
+	return b.MediaType == ociencspec.MediaTypeLayerGzipEnc ||
+		b.MediaType == ociencspec.MediaTypeLayerEnc
+}
+
+// GetEncryptedMediaType will return the mediatype to its encrypted counterpart and return
+// an error if the mediatype does not support encryption
+func GetEncryptedMediaType(mediatype string) (string, error) {
+	switch mediatype {
+	case DockerV2Schema2LayerMediaType, imgspecv1.MediaTypeImageLayerGzip:
+		return ociencspec.MediaTypeLayerGzipEnc, nil
+	case imgspecv1.MediaTypeImageLayer:
+		return ociencspec.MediaTypeLayerEnc, nil
+	}
+	return "", errors.Errorf("unsupported mediatype to encrypt: %v", mediatype)
 }
