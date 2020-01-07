@@ -19,6 +19,7 @@ package cgroups
 import (
 	"fmt"
 
+	v1 "github.com/containerd/cgroups/stats/v1"
 	specs "github.com/opencontainers/runtime-spec/specs-go"
 )
 
@@ -42,7 +43,7 @@ const (
 )
 
 // Subsystems returns a complete list of the default cgroups
-// avaliable on most linux systems
+// available on most linux systems
 func Subsystems() []Name {
 	n := []Name{
 		Hugetlb,
@@ -85,7 +86,7 @@ type deleter interface {
 
 type stater interface {
 	Subsystem
-	Stat(path string, stats *Metrics) error
+	Stat(path string, stats *v1.Metrics) error
 }
 
 type updater interface {

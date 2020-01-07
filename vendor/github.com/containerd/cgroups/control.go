@@ -19,6 +19,7 @@ package cgroups
 import (
 	"os"
 
+	v1 "github.com/containerd/cgroups/stats/v1"
 	specs "github.com/opencontainers/runtime-spec/specs-go"
 )
 
@@ -44,6 +45,15 @@ type Process struct {
 	Path string
 }
 
+type Task struct {
+	// Subsystem is the name of the subsystem that the task is in
+	Subsystem Name
+	// Pid is the process id of the task
+	Pid int
+	// Path is the full path of the subsystem and location that the task is in
+	Path string
+}
+
 // Cgroup handles interactions with the individual groups to perform
 // actions on them as them main interface to this cgroup package
 type Cgroup interface {
@@ -59,11 +69,13 @@ type Cgroup interface {
 	// subsystems are moved one at a time
 	MoveTo(Cgroup) error
 	// Stat returns the stats for all subsystems in the cgroup
-	Stat(...ErrorHandler) (*Metrics, error)
+	Stat(...ErrorHandler) (*v1.Metrics, error)
 	// Update updates all the subsystems with the provided resource changes
 	Update(resources *specs.LinuxResources) error
 	// Processes returns all the processes in a select subsystem for the cgroup
 	Processes(Name, bool) ([]Process, error)
+	// Tasks returns all the tasks in a select subsystem for the cgroup
+	Tasks(Name, bool) ([]Task, error)
 	// Freeze freezes or pauses all processes inside the cgroup
 	Freeze() error
 	// Thaw thaw or resumes all processes inside the cgroup

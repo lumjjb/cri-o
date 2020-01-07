@@ -4,21 +4,17 @@ module github.com/cri-o/cri-o
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/Microsoft/go-winio v0.4.14
+	github.com/Microsoft/go-winio v0.4.15-0.20190919025122-fc70bd9a86b5
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/containerd/cgroups v0.0.0-20180515175038-5e610833b720
-	github.com/containerd/console v0.0.0-20170925154832-84eeaae905fa // indirect
+	github.com/containerd/cgroups v0.0.0-20190919134610-bf292b21730f
 	github.com/containerd/containerd v1.3.0
-	github.com/containerd/fifo v0.0.0-20180307165137-3d5202aec260 // indirect
-	github.com/containerd/go-runc v0.0.0-20180907222934-5a6d9f37cfa3 // indirect
 	github.com/containerd/ttrpc v0.0.0-20190828172938-92c8520ef9f8
-	github.com/containerd/typeurl v0.0.0-20180627222232-a93fcdb778cd // indirect
 	github.com/containernetworking/cni v0.7.2-0.20190904153231-83439463f784
 	github.com/containernetworking/plugins v0.8.2
 	github.com/containers/buildah v1.11.5-0.20191031204705-20e92ffe0982
-	github.com/containers/image/v5 v5.0.0
+	github.com/containers/image/v5 v5.1.0
 	github.com/containers/libpod v1.6.3-0.20191111140219-de32b89eff09
-	github.com/containers/storage v1.13.5
+	github.com/containers/storage v1.15.3
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/cpuguy83/go-md2man v1.0.10
 	github.com/cri-o/ocicni v0.1.1-0.20190920040751-deac903fd99b
@@ -28,7 +24,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/ghodss/yaml v1.0.1-0.20180820084758-c7ce16629ff4 // indirect
 	github.com/go-zoo/bone v0.0.0-20170711140942-031b4005dfe2
-	github.com/godbus/dbus v0.0.0-20181101234600-2ff6f7ffd60f
+	github.com/godbus/dbus v0.0.0-20190422162347-ade71ed3457e
 	github.com/gogo/protobuf v1.2.1
 	github.com/golang/mock v1.2.0
 	github.com/golangci/golangci-lint v1.21.0
@@ -36,7 +32,6 @@ require (
 	github.com/googleapis/gnostic v0.0.0-20170729233727-0c5108395e2d // indirect
 	github.com/gregjones/httpcache v0.0.0-20170728041850-787624de3eb7 // indirect
 	github.com/hashicorp/go-multierror v1.0.0
-	github.com/hashicorp/golang-lru v0.0.0-20160207214719-a0d98a5f2880 // indirect
 	github.com/hpcloud/tail v1.0.0
 	github.com/kr/pty v1.1.8
 	github.com/lithammer/dedent v1.1.0 // indirect
@@ -46,7 +41,7 @@ require (
 	github.com/onsi/gomega v1.7.1
 	github.com/opencontainers/go-digest v1.0.0-rc1.0.20180430190053-c9281466c8b2
 	github.com/opencontainers/image-spec v1.0.2-0.20190823105129-775207bd45b6
-	github.com/opencontainers/runc v1.0.0-rc8.0.20190827142921-dd075602f158
+	github.com/opencontainers/runc v1.0.0-rc9
 	github.com/opencontainers/runtime-spec v0.1.2-0.20190618234442-a950415649c7
 	github.com/opencontainers/runtime-tools v0.9.0
 	github.com/opencontainers/selinux v1.3.0
@@ -58,11 +53,11 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/soheilhy/cmux v0.1.4
 	github.com/syndtr/gocapability v0.0.0-20180916011248-d98352740cb2
-	github.com/urfave/cli v1.20.0
+	github.com/urfave/cli v1.22.1
 	github.com/vbatts/git-validation v1.0.0
 	golang.org/x/net v0.0.0-20190923162816-aa69164e4478
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/sys v0.0.0-20190922100055-0a153f010e69
+	golang.org/x/sys v0.0.0-20191127021746-63cb32ae39b2
 	google.golang.org/grpc v1.24.0
 	k8s.io/api v0.0.0-20191004102349-159aefb8556b
 	k8s.io/apiextensions-apiserver v0.0.0-20191004105649-b14e3c49469a // indirect
