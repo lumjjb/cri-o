@@ -2,11 +2,13 @@ package server
 
 import (
 	"encoding/base64"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/containers/image/v5/copy"
 	"github.com/containers/image/v5/types"
+	encconfig "github.com/containers/ocicrypt/config"
 	"github.com/cri-o/cri-o/pkg/storage"
 	"github.com/cri-o/cri-o/server/useragent"
 	"github.com/sirupsen/logrus"
@@ -28,6 +30,15 @@ func (s *Server) PullImage(ctx context.Context, req *pb.PullImageRequest) (resp 
 	img := req.GetImage()
 	if img != nil {
 		image = img.Image
+	}
+
+	var dcc *encconfig.DecryptConfig
+	if _, err := os.Stat(s.decryptionKeysPath); err == nil {
+		cc, err := getDecryptionKeys(s.decryptionKeysPath)
+		if err != nil {
+			return nil, err
+		}
+		dcc = cc.DecryptConfig
 	}
 
 	var (
@@ -60,6 +71,7 @@ func (s *Server) PullImage(ctx context.Context, req *pb.PullImageRequest) (resp 
 				SignaturePolicyPath:     s.ImageContext().SignaturePolicyPath,
 				AuthFilePath:            s.config.GlobalAuthFile,
 			},
+			OciDecryptConfig: dcc,
 		}
 
 		// Specifying a username indicates the user intends to send authentication to the registry.

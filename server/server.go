@@ -66,9 +66,10 @@ type Server struct {
 	netPlugin       ocicni.CNIPlugin
 	hostportManager hostport.HostPortManager
 
-	appArmorProfile string
-	hostIP          string
-	bindAddress     string
+	appArmorProfile    string
+	decryptionKeysPath string
+	hostIP             string
+	bindAddress        string
 
 	*lib.ContainerServer
 	monitorsChan      chan struct{}
@@ -390,6 +391,8 @@ func New(ctx context.Context, config *Config) (*Server, error) {
 		monitorsChan:      make(chan struct{}),
 		defaultIDMappings: idMappings,
 	}
+
+	s.decryptionKeysPath = config.DecryptionKeysPath
 
 	if s.seccompEnabled {
 		seccompProfile, fileErr := ioutil.ReadFile(config.SeccompProfile)

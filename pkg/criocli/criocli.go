@@ -109,6 +109,9 @@ func mergeConfig(config *server.Config, ctx *cli.Context) error {
 	if ctx.GlobalIsSet("default-runtime") {
 		config.DefaultRuntime = ctx.GlobalString("default-runtime")
 	}
+	if ctx.IsSet("decryption-keys-path") {
+		config.DecryptionKeysPath = ctx.String("decryption-keys-path")
+	}
 	if ctx.GlobalIsSet("runtimes") {
 		runtimes := ctx.GlobalStringSlice("runtimes")
 		for _, r := range runtimes {
@@ -292,6 +295,10 @@ func getCrioFlags(defConf *server.Config) []cli.Flag {
 		cli.StringFlag{
 			Name:  "default-transport",
 			Usage: "default transport",
+		},
+		cli.StringFlag{
+			Name:  "decryption-keys-path",
+			Usage: "Path to load keys for image decryption",
 		},
 		// XXX: DEPRECATED
 		cli.StringFlag{

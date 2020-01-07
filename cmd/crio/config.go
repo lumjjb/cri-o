@@ -99,6 +99,10 @@ grpc_max_recv_msg_size = {{ .GRPCMaxRecvMsgSize }}
 # The name is matched against the runtimes map below.
 default_runtime = "{{ .DefaultRuntime }}"
 
+# decryption_keys_path is the path where the keys required for
+# image decryption are stored.
+decryption_keys_path = "{{ .DecryptionKeysPath }}"
+
 # If true, the runtime will not use pivot_root, but instead use MS_MOVE.
 no_pivot = {{ .NoPivot }}
 
