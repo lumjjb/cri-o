@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/containerd/cgroups"
+	cgroupstats "github.com/containerd/cgroups/stats/v1"
 	"github.com/cri-o/cri-o/utils"
 	"github.com/opencontainers/runc/libcontainer"
 	rspec "github.com/opencontainers/runtime-spec/specs-go"
@@ -119,7 +120,7 @@ func containerStats(ctr *Container) (*ContainerStats, error) {
 	return stats, nil
 }
 
-func metricsToCtrStats(c *Container, m *cgroups.Metrics) *ContainerStats {
+func metricsToCtrStats(c *Container, m *cgroupstats.Metrics) *ContainerStats {
 	var (
 		cpu         float64
 		cpuNano     uint64

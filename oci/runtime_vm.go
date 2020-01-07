@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/containerd/cgroups"
+	cgroupstats "github.com/containerd/cgroups/stats/v1"
 	tasktypes "github.com/containerd/containerd/api/types/task"
 	"github.com/containerd/containerd/namespaces"
 	client "github.com/containerd/containerd/runtime/v2/shim"
@@ -630,7 +630,7 @@ func (r *runtimeVM) ContainerStats(c *Container) (*ContainerStats, error) {
 		return nil, errors.Wrap(err, "failed to extract container metrics")
 	}
 
-	metrics, ok := stats.(*cgroups.Metrics)
+	metrics, ok := stats.(*cgroupstats.Metrics)
 	if !ok {
 		return nil, errors.Errorf("Unknown stats type %T", stats)
 	}
