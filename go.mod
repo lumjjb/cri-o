@@ -74,6 +74,7 @@ require (
 )
 
 replace (
+	github.com/containers/ocicrypt => github.com/containers/ocicrypt v0.0.0-20200210162441-0343cc6053fd
 	google.golang.org/grpc => github.com/grpc/grpc-go v1.23.0
 	k8s.io/api => k8s.io/api v0.0.0-20190313235455-40a48860b5ab
 	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.0.0-20190315093550-53c4693659ed
