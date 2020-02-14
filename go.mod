@@ -14,7 +14,7 @@ require (
 	github.com/containers/buildah v1.11.5-0.20191031204705-20e92ffe0982
 	github.com/containers/image/v5 v5.1.0
 	github.com/containers/libpod v1.6.3-0.20191111140219-de32b89eff09
-	github.com/containers/ocicrypt v0.0.0-20190930154801-b87a4a69c741
+	github.com/containers/ocicrypt v0.0.0-20200210162441-0343cc6053fd
 	github.com/containers/storage v1.15.3
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/cpuguy83/go-md2man v1.0.10
@@ -36,6 +36,7 @@ require (
 	github.com/hpcloud/tail v1.0.0
 	github.com/kr/pty v1.1.8
 	github.com/lithammer/dedent v1.1.0 // indirect
+	github.com/lumjjb/seclkeywrap v0.0.0-20200213232257-f323c35282ec
 	github.com/onsi/ginkgo v1.10.3
 	github.com/onsi/gomega v1.7.1
 	github.com/opencontainers/go-digest v1.0.0-rc1.0.20180430190053-c9281466c8b2
@@ -46,7 +47,7 @@ require (
 	github.com/opencontainers/selinux v1.3.0
 	github.com/pborman/uuid v1.2.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.1.0
 	github.com/renstrom/dedent v1.0.0 // indirect
 	github.com/seccomp/libseccomp-golang v0.9.1

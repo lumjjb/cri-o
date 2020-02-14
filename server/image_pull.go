@@ -8,9 +8,11 @@ import (
 
 	"github.com/containers/image/v5/copy"
 	"github.com/containers/image/v5/types"
+	"github.com/containers/ocicrypt"
 	encconfig "github.com/containers/ocicrypt/config"
 	"github.com/cri-o/cri-o/pkg/storage"
 	"github.com/cri-o/cri-o/server/useragent"
+	"github.com/lumjjb/seclkeywrap"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	pb "k8s.io/kubernetes/pkg/kubelet/apis/cri/runtime/v1alpha2"
@@ -32,6 +34,10 @@ func (s *Server) PullImage(ctx context.Context, req *pb.PullImageRequest) (resp 
 		image = img.Image
 	}
 
+	// TODO(lumjjb): Register keywrapper
+	ocicrypt.RegisterKeyWrapper("secl", seclkeywrap.NewKeyWrapper())
+
+	// TODO(lumjjb): Add decryption params here as well
 	var dcc *encconfig.DecryptConfig
 	if _, err := os.Stat(s.decryptionKeysPath); err == nil {
 		cc, err := getDecryptionKeys(s.decryptionKeysPath)
