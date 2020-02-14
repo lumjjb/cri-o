@@ -103,6 +103,10 @@ default_runtime = "{{ .DefaultRuntime }}"
 # image decryption are stored.
 decryption_keys_path = "{{ .DecryptionKeysPath }}"
 
+# decryption_secl_parameters is the parameters to use to obtain keys
+# via secl key broker
+decryption_secl_parameters = "{{ .DecryptionSeclParameters }}"
+
 # If true, the runtime will not use pivot_root, but instead use MS_MOVE.
 no_pivot = {{ .NoPivot }}
 

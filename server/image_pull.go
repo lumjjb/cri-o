@@ -37,7 +37,7 @@ func (s *Server) PullImage(ctx context.Context, req *pb.PullImageRequest) (resp 
 	// TODO(lumjjb): Register keywrapper
 	ocicrypt.RegisterKeyWrapper("secl", seclkeywrap.NewKeyWrapper())
 
-	// TODO(lumjjb): Add decryption params here as well
+	// TODO(lumjjb): Add decryption params here as well using combine CC
 	var dcc *encconfig.DecryptConfig
 	if _, err := os.Stat(s.decryptionKeysPath); err == nil {
 		cc, err := getDecryptionKeys(s.decryptionKeysPath)

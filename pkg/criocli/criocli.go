@@ -112,6 +112,10 @@ func mergeConfig(config *server.Config, ctx *cli.Context) error {
 	if ctx.IsSet("decryption-keys-path") {
 		config.DecryptionKeysPath = ctx.String("decryption-keys-path")
 	}
+	if ctx.IsSet("decryption-secl-parameters") {
+		config.DecryptionSeclParameters = ctx.String("decryption-secl-parameters")
+	}
+
 	if ctx.GlobalIsSet("runtimes") {
 		runtimes := ctx.GlobalStringSlice("runtimes")
 		for _, r := range runtimes {
@@ -300,6 +304,11 @@ func getCrioFlags(defConf *server.Config) []cli.Flag {
 			Name:  "decryption-keys-path",
 			Usage: "Path to load keys for image decryption",
 		},
+		cli.StringFlag{
+			Name:  "decryption-secl-parameters",
+			Usage: "Parameters for getting keys via secl key broker",
+		},
+
 		// XXX: DEPRECATED
 		cli.StringFlag{
 			Name:  "runtime",
