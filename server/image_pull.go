@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/base64"
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -34,18 +35,29 @@ func (s *Server) PullImage(ctx context.Context, req *pb.PullImageRequest) (resp 
 		image = img.Image
 	}
 
-	// TODO(lumjjb): Register keywrapper
-	ocicrypt.RegisterKeyWrapper("secl", seclkeywrap.NewKeyWrapper())
+	ccs := []encconfig.CryptoConfig{}
+	if s.decryptionSeclParameters != "" {
+		ocicrypt.RegisterKeyWrapper("secl", seclkeywrap.NewKeyWrapper())
 
-	// TODO(lumjjb): Add decryption params here as well using combine CC
-	var dcc *encconfig.DecryptConfig
+		seclDcc, err := seclkeywrap.CreateCryptoConfig([]string{}, []string{s.decryptionSeclParameters})
+		if err != nil {
+			return nil, fmt.Errorf("Invalid secl decryption parameters: %v", err)
+		}
+
+		ccs = append(ccs, seclDcc)
+
+	}
+
 	if _, err := os.Stat(s.decryptionKeysPath); err == nil {
 		cc, err := getDecryptionKeys(s.decryptionKeysPath)
 		if err != nil {
 			return nil, err
 		}
-		dcc = cc.DecryptConfig
+		ccs = append(ccs, cc)
 	}
+
+	combinedCc := encconfig.CombineCryptoConfigs(ccs)
+	dcc := combinedCc.DecryptConfig
 
 	var (
 		images []string

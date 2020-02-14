@@ -306,7 +306,7 @@ func getCrioFlags(defConf *server.Config) []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "decryption-secl-parameters",
-			Usage: "Parameters for getting keys via secl key broker",
+			Usage: "Parameters for getting keys via secl key broker (format is secl:wlsUrl,/path/to/wlsCert",
 		},
 
 		// XXX: DEPRECATED
