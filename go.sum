@@ -450,6 +450,8 @@ github.com/lithammer/dedent v1.1.0/go.mod h1:jrXYCQtgg0nJiN+StA2KgR7w6CiQNv9Fd/Z
 github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e/go.mod h1:7rIyQOR62GCctdiQpZ/zOJlFyk6y+94wXzv6RNZgaR4=
 github.com/lumjjb/seclkeywrap v0.0.0-20200213232257-f323c35282ec h1:I3nBIgPFTpWxy7tpJy/oVNw6r5dH4wAjj4vGTNaAfxg=
 github.com/lumjjb/seclkeywrap v0.0.0-20200213232257-f323c35282ec/go.mod h1:u6A2m9zRzbjWKlfDuCeK4C3466Z2vV/cXD8gNZYo0VM=
+github.com/lumjjb/seclkeywrap v0.0.0-20200302155103-f1c29672e074 h1:rqhWStVjorfMtr74qN+mwBlL+wCw1mIH+rq1mpT6fWM=
+github.com/lumjjb/seclkeywrap v0.0.0-20200302155103-f1c29672e074/go.mod h1:u6A2m9zRzbjWKlfDuCeK4C3466Z2vV/cXD8gNZYo0VM=
 github.com/magiconair/properties v1.8.0 h1:LLgXmsheXeRoUOBOjtwPQCWIYqM/LU1ayDtDePerRcY=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb h1:RHba4YImhrUVQDHUCe2BNSOz4tVy2yGyXhvYDvxGgeE=

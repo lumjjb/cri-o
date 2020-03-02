@@ -176,16 +176,16 @@ github.com/containers/libpod/libpod/lock/shm
 github.com/containers/libpod/pkg/resolvconf/dns
 # github.com/containers/libtrust v0.0.0-20190913040956-14b96171aa3b
 github.com/containers/libtrust
-# github.com/containers/ocicrypt v0.0.0-20190930154801-b87a4a69c741
+# github.com/containers/ocicrypt v0.0.0-20200210162441-0343cc6053fd => github.com/containers/ocicrypt v0.0.0-20200210162441-0343cc6053fd
 github.com/containers/ocicrypt
 github.com/containers/ocicrypt/config
+github.com/containers/ocicrypt/utils
 github.com/containers/ocicrypt/spec
 github.com/containers/ocicrypt/blockcipher
 github.com/containers/ocicrypt/keywrap
 github.com/containers/ocicrypt/keywrap/jwe
 github.com/containers/ocicrypt/keywrap/pgp
 github.com/containers/ocicrypt/keywrap/pkcs7
-github.com/containers/ocicrypt/utils
 # github.com/containers/psgo v1.3.2
 github.com/containers/psgo
 github.com/containers/psgo/internal/capabilities
@@ -516,6 +516,8 @@ github.com/konsorten/go-windows-terminal-sequences
 github.com/kr/pty
 # github.com/lithammer/dedent v1.1.0
 github.com/lithammer/dedent
+# github.com/lumjjb/seclkeywrap v0.0.0-20200302155103-f1c29672e074
+github.com/lumjjb/seclkeywrap
 # github.com/magiconair/properties v1.8.0
 github.com/magiconair/properties
 # github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb
@@ -644,7 +646,7 @@ github.com/ostreedev/ostree-go/pkg/glibobject
 github.com/ostreedev/ostree-go/pkg/otbuiltin
 # github.com/pelletier/go-toml v1.2.0
 github.com/pelletier/go-toml
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
@@ -920,7 +922,7 @@ google.golang.org/grpc/internal/syscall
 gopkg.in/fsnotify.v1
 # gopkg.in/inf.v0 v0.9.1
 gopkg.in/inf.v0
-# gopkg.in/square/go-jose.v2 v2.3.1
+# gopkg.in/square/go-jose.v2 v2.4.1
 gopkg.in/square/go-jose.v2
 gopkg.in/square/go-jose.v2/cipher
 gopkg.in/square/go-jose.v2/json
