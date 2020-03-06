@@ -36,9 +36,7 @@ require (
 	github.com/hpcloud/tail v1.0.0
 	github.com/kr/pty v1.1.8
 	github.com/lithammer/dedent v1.1.0 // indirect
-	github.com/lumjjb/seclkeywrap v0.0.0-20200302155103-f1c29672e074
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/lumjjb/seclkeywrap v0.0.0-20200306182048-5ba8b5224f53
 	github.com/onsi/ginkgo v1.10.3
 	github.com/onsi/gomega v1.7.1
 	github.com/opencontainers/go-digest v1.0.0-rc1.0.20180430190053-c9281466c8b2
