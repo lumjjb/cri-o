@@ -245,8 +245,10 @@ func getDecSymKeyFromBroker(keyUrl string) (symKey []byte, err error) {
 	//symKey = []byte("this_is_a_256_bit_AES_key_12345!")
 	//return symKey, nil
 	//run wpm to fetch a new key
+        logrus.Debugf("Calling wlagent with parameters: %v %v %v", "wlagent", "fetch-key-url", keyUrl)
 	cmdout, err := exec.Command("wlagent", "fetch-key-url", keyUrl).Output()
 	if err != nil {
+                logrus.Debugf("CMDOUT from wlagent: %v", cmdout)
 		return nil, errors.Wrap(err, "Unable to run wlagent")
 	}
 
