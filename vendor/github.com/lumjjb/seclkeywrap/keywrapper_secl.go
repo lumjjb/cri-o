@@ -10,6 +10,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"io"
+        "sync"
 
 	"github.com/sirupsen/logrus"
 	"github.com/containers/ocicrypt/config"
@@ -28,6 +29,8 @@ const (
 
 var (
 	WrapMode string = WrapTypeSymmetric
+        Wlmutex sync.Mutex
+
 )
 
 type seclKeyWrapper struct{}
@@ -246,6 +249,8 @@ func getDecSymKeyFromBroker(keyUrl string) (symKey []byte, err error) {
 	//return symKey, nil
 	//run wpm to fetch a new key
         logrus.Debugf("Calling wlagent with parameters: %v %v %v", "wlagent", "fetch-key-url", keyUrl)
+        Wlmutex.Lock()
+        defer Wlmutex.Unlock()
 	cmdout, err := exec.Command("wlagent", "fetch-key-url", keyUrl).Output()
 	if err != nil {
                 logrus.Debugf("CMDOUT from wlagent: %v", cmdout)
