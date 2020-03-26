@@ -11,6 +11,7 @@ import (
 	"crypto/rand"
 	"io"
 
+	"github.com/sirupsen/logrus"
 	"github.com/containers/ocicrypt/config"
 	"github.com/containers/ocicrypt/keywrap"
 	encutils "github.com/containers/ocicrypt/utils"
@@ -111,6 +112,7 @@ func (kw *seclKeyWrapper) WrapKeys(ec *config.EncryptConfig, optsData []byte) ([
 }
 
 func (kw *seclKeyWrapper) UnwrapKey(dc *config.DecryptConfig, annotation []byte) ([]byte, error) {
+        logrus.Debugf("Calling secl.UnwrawpKeys")
 	// If no WLS url given, nothing to decrypt
 	if len(dc.Parameters["secl-enabled"]) == 0 {
 		return nil, nil
@@ -121,6 +123,7 @@ func (kw *seclKeyWrapper) UnwrapKey(dc *config.DecryptConfig, annotation []byte)
 	if err != nil {
 		return nil, errors.Wrap(err, "Unable to unmarshal annotation packet")
 	}
+        logrus.Debugf("Unmarshaled annotatino packet %+v", ap)
 
 	switch ap.WrapType {
 	case WrapTypeAssymmetric:
@@ -136,9 +139,10 @@ func (kw *seclKeyWrapper) UnwrapKey(dc *config.DecryptConfig, annotation []byte)
 		// Get private key from server and decrypt packet
 		symKey, err := getDecSymKeyFromBroker(ap.KeyUrl)
 		if err != nil {
+                        logrus.Debugf("Unable to obtain key from decsymkeyfrombroker: %v", err)
 			return nil, errors.Wrapf(err, "Unable to obtain key (url: %v)", ap.KeyUrl)
 		}
-
+                logrus.Debugf("Got symm key: %v", symKey)
 		return aesDecrypt(symKey, ap.WrappedKey)
 	}
 
